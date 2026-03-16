@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_3_41_bug/bottom_sheet.dart';
+import 'package:flutter_3_41_bug/popup_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,9 +51,12 @@ class MyHomePage extends StatelessWidget {
 
   final String title;
 
-
   void _incrementCounter(BuildContext context) {
-    BottomSheetDialog.showDialog(context: context, child: Container(), routeSettings: null);
+    BottomSheetDialog.showDialog(
+      context: context,
+      child: const BottomSheetContent(),
+      routeSettings: null,
+    );
   }
 
   @override
@@ -91,9 +95,7 @@ class MyHomePage extends StatelessWidget {
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
           mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-          ],
+          children: [const Text('You have pushed the button this many times:')],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -101,6 +103,32 @@ class MyHomePage extends StatelessWidget {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class BottomSheetContent extends StatelessWidget {
+  const BottomSheetContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextButton(
+          child: Text('close'),
+          onPressed: () async {
+            final result = await PopupDialog.questionShow(
+              context,
+              "Are you sure?",
+              "Yes",
+              "No",
+            );
+            if (result == true && context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
+      ],
     );
   }
 }
